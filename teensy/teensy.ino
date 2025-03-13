@@ -8,12 +8,15 @@
 #define COLOR_ORDER GRB
 #define NUM_LEDS 300
 
+int fadeInDuration = 90;
 CRGB leds[NUM_LEDS];
 void setup() {
   // put your setup code here, to run once:
   // FastLED.addLeds<WS2812B, DATA_PIN, RGB>(ledsRGB, getRGBWsize(NUM_LEDS_1));
   FastLED.addLeds<WS2812B, DATA_PIN_PILL, GRB>(leds, NUM_LEDS);
+  delay(1000);
   blank();
+  fadeIn(100,30,255,1,50,300);
 }
 
 void loop() {
@@ -110,3 +113,59 @@ void fill(int r, int g, int b, int led, int len, float duration ){
       FastLED.show();
   }
 }
+
+void showVectorFrame(Vector<int> &frame)
+{
+  Vector<int> r(frame.size);
+
+  for (size_t i{0}; i < frame.size; ++i)
+  {
+    r[i] = frame[i];
+  }
+
+  int checkSum = 0;
+
+  for (int i = 0; i < 136; i++)
+  {
+    leds[i] = CRGB(frame[(i * 3) + 0], frame[(i * 3) + 1], frame[(i * 3) + 2]);
+    leds[300 - i] = CRGB(frame[(i * 3) + 0], frame[(i * 3) + 1], frame[(i * 3) + 2]);
+    checkSum = checkSum + frame[(i * 3) + 0] + frame[(i * 3) + 1] + frame[(i * 3) + 2];
+  }
+
+  if (checkSum == frame[408])
+  {
+    FastLED.show();
+  }
+}
+
+void showFadeinFrame(Vector<int> &frame, int position)
+{
+  int checkSum = 0;
+
+  for (int i = 0; i < 136; i++)
+  {
+    uint8_t r = frame[(i * 3) + 0];
+    uint8_t g = frame[(i * 3) + 1];
+    uint8_t b = frame[(i * 3) + 2];
+
+    uint8_t rOnLightbar = leds[i].r;
+    uint8_t gOnLightbar = leds[i].g;
+    uint8_t bOnLightbar = leds[i].b;
+
+    if (position < fadeInDuration)
+    {
+      r = (double)rOnLightbar + (double(r - rOnLightbar)  * position / fadeInDuration);
+      g = (double)gOnLightbar + (double(g - gOnLightbar)  * position / fadeInDuration);
+      b = (double)bOnLightbar + (double(b - bOnLightbar)  * position / fadeInDuration);
+    }
+    leds[i] = CRGB(r,g,b);
+    leds[300 - i] = CRGB(r,g,b);
+    checkSum = checkSum + frame[(i * 3) + 0] + frame[(i * 3) + 1] + frame[(i * 3) + 2];
+  }
+
+  if (checkSum == frame[408])
+  {
+    FastLED.show();
+  }
+}
+

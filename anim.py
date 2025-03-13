@@ -75,5 +75,6 @@ b= 0
 # led.fadeIn(r,g,b,1,100,l)
 led.blank()
 time.sleep(1)
-led.fillIn(r,g,b,300,5,0.15)
+play_seq()
+# led.fillIn(r,g,b,300,5,0.15)
 # led.fadeOut(r,g,b,1,100,l)
