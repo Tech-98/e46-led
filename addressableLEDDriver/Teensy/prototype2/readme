@@ -1,0 +1,13 @@
+calibration 
+	-The calibration folder contains code for calibrating the color of the LEDs.
+	-The rig contains rotary encoders which are used to adjust the the hue of the color.
+ 	-The serial monitor would output the updated hue value.
+	-The hue of each color should be noted to then be used in the final prototype.
+
+prototype
+	-The prototype folder contains the final code to be shipped.
+	-Once the calibration is done, the new hue values should be update in the colors and colorsPill array.
+	-The colorLenght variable should be updated if the number of colors in the array changes. 
+	-The knobs would now be used to adjust the brightness of the leds and the buttons would be use change colors.
+	-A default brightness could then be set by changing the sideBrightness and pillBrightness variable
+	-The skip variable could also be used to change how many leds to skip on the side leds.
